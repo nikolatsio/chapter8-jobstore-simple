@@ -1,11 +1,12 @@
 from flask import Flask, render_template,jsonify, request, Response
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
+import sys
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['OPENSHIFT_POSTGRESQL_DB_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRESQL_DB_URL']
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 db = SQLAlchemy(app)
