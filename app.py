@@ -10,7 +10,11 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRESQL_DB_URL']
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
+
 db = SQLAlchemy(app)
+
+from jobstore import *
+db.create_all()
 
 class Job(db.Model):
 	__tablename__ = 'jobs'
