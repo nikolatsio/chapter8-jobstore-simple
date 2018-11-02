@@ -3,7 +3,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 import os
 import sys
 from datetime import datetime
-from bson import json_util, ObjectId
 
 
 app = Flask(__name__)
