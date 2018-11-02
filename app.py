@@ -17,7 +17,8 @@ db.create_all()
 
 class Job(db.Model):
 	__tablename__ = 'jobs'
-	id = db.Column(db.Integer(), primary_key=True)
+        __table_args__ = {'extend_existing': True} 
+        id = db.Column(db.Integer(), primary_key=True)
 	title = db.Column(db.String(64), index=True, nullable=False)
 	description = db.Column(db.Text())
 	posted_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
