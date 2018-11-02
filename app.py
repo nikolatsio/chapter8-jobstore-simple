@@ -6,7 +6,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://useryrM:7yTtFTA4@postgresql:5432/tododb'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRESQL_DB_URL']
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
@@ -17,7 +16,6 @@ db.create_all()
 
 class Job(db.Model):
 	__tablename__ = 'jobs'
-	__table_args__ = {'extend_existing': True}
 	id = db.Column(db.Integer(), primary_key=True)
 	title = db.Column(db.String(64), index=True, nullable=False)
 	description = db.Column(db.Text())
