@@ -1,14 +1,19 @@
 from flask import Flask, render_template,jsonify, request, Response
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
+import sys
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['OPENSHIFT_POSTGRESQL_DB_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://useryrM:7yTtFTA4@postgresql:5432/tododb'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRESQL_DB_URL']
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
+
 db = SQLAlchemy(app)
+
+db.create_all()
 
 class Job(db.Model):
 	__tablename__ = 'jobs'
@@ -57,4 +62,5 @@ def post_job():
 	return jsonify(job.to_json()) , 201
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	# app.run(debug=True)
+        app.run(host='0.0.0.0', debug=True, use_reloader=False)

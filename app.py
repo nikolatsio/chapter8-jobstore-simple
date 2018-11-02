@@ -1,66 +1,17 @@
-from flask import Flask, render_template,jsonify, request, Response
-from flask.ext.sqlalchemy import SQLAlchemy
+#!/usr/bin/python
 import os
-import sys
-from datetime import datetime
 
-app = Flask(__name__)
-app.config['PROPAGATE_EXCEPTIONS'] = True
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://useryrM:7yTtFTA4@postgresql:5432/tododb'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRESQL_DB_URL']
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+virtenv = os.environ['OPENSHIFT_PYTHON_DIR'] + '/virtenv/'
+virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
+try:
+    execfile(virtualenv, dict(__file__=virtualenv))
+except IOError:
+    pass
+#
+# IMPORTANT: Put any additional includes below this line.  If placed above this
+# line, it's possible required libraries won't be in your searchable path
+#
 
-
-db = SQLAlchemy(app)
-
+from jobstore import app as application
+from jobstore import *
 db.create_all()
-
-class Job(db.Model):
-	__tablename__ = 'jobs'
-	id = db.Column(db.Integer(), primary_key=True)
-	title = db.Column(db.String(64), index=True, nullable=False)
-	description = db.Column(db.Text())
-	posted_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-	company = db.Column(db.String(100), nullable=False)
-
-	def __repr__(self):
-		return 'Job %s' % self.title
-
-	def to_json(self):
-		job_json = {
-			'id' : self.id,
-			'title': self.title,
-			'description' : self.description,
-			'posted_at' : self.posted_at,
-			'company':self.company
-		}
-		return job_json
-
-
-	@staticmethod
-	def from_json(job_json):
-		title = job_json.get('title')
-		description = job_json.get('description')
-		company = job_json.get('company')
-		return Job(title=title, description=description,company=company)
-
-
-@app.route('/')
-def index():
-	return render_template('index.html')
-
-@app.route('/api/v1/jobs')
-def all_jobs():
-	jobs = Job.query.all()
-	return jsonify({'jobs':[job.to_json() for job in jobs]})
-
-@app.route('/api/v1/jobs', methods=['POST'])
-def post_job():
-	job = Job.from_json(request.json)
-	db.session.add(job)
-	db.session.commit()
-	return jsonify(job.to_json()) , 201
-
-if __name__ == '__main__':
-	# app.run(debug=True)
-        app.run(host='0.0.0.0', debug=True, use_reloader=False)
