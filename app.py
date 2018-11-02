@@ -12,7 +12,6 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 
 db = SQLAlchemy(app)
-from app import app as application
 from app import *
 db.create_all()
 
