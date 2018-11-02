@@ -12,9 +12,6 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 db = SQLAlchemy(app)
 
-from app import db
-db.create_all()
-
 class Job(db.Model):
 	__tablename__ = 'jobs'
 	id = db.Column(db.Integer(), primary_key=True)
@@ -44,6 +41,7 @@ class Job(db.Model):
 		company = job_json.get('company')
 		return Job(title=title, description=description,company=company)
 
+db.create_all()
 
 @app.route('/')
 def index():
@@ -60,6 +58,7 @@ def post_job():
 	db.session.add(job)
 	db.session.commit()
 	return jsonify(job.to_json()) , 201
+
 
 if __name__ == '__main__':
 	# app.run(debug=True)
