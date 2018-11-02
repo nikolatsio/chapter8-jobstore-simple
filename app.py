@@ -12,8 +12,8 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 
 db = SQLAlchemy(app)
-from jobstore import app as application
-from jobstore import *
+from app import app as application
+from app import *
 db.create_all()
 
 class Job(db.Model):
