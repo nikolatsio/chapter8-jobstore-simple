@@ -4,7 +4,6 @@ import os
 import sys
 from datetime import datetime
 
-
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://useryrM:7yTtFTA4@postgresql:5432/tododb'
@@ -13,6 +12,8 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 
 db = SQLAlchemy(app)
+from jobstore import app as application
+from jobstore import *
 db.create_all()
 
 class Job(db.Model):
